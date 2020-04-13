@@ -1,0 +1,125 @@
+package 结对编程1;
+
+import java.util.Scanner;
+
+public class JDBC {
+	public static void main(String[] args) 
+	{
+		//输入查询的年月
+		Scanner sc = new Scanner(System.in);
+		System.out.println("请选择查询的年份 (1900年-2099年)");
+		int year = sc.nextInt();
+		sc.nextLine();
+		while(year<1900||year>2099)
+		{
+			System.out.println("输入年份超限，请重新输入，范围为1900到2099年");
+			System.out.println("请选择查询的年份 1900-2099");
+			year = sc.nextInt();
+			sc.nextLine();
+		}
+		System.out.println("请选择查询的月份");
+		int month = sc.nextInt();
+		sc.nextLine();
+		while(month>12||month<=0)
+		{
+			System.out.println("输入月份有问题；请重新输入");
+			System.out.println("请选择查询的月份");
+			month = sc.nextInt();
+			sc.nextLine();
+		}
+		//今年的天数
+		int a = 0;
+		//离1900年的年份天数和 后面加上月份天数和
+		int b = 0;
+		//今年的月份天数
+		int c = 0;
+		//算出来要查寻的一号是周几
+		int d = 0;
+		//判断年份是否合法
+		if (year >= 1900 && year <= 2099) 
+		{
+			//判断月份是否合法
+			if (month >= 1 && month <= 12) 
+			{
+				//求要查寻的年份离1900.1.1有多少天
+				for (int i = 1900; i < year; i++) 
+				{
+					a = isRun(i);
+					b = b + a;
+				}
+				//加上之前月份总计多少天
+				for (int i = 1; i < month; i++) 
+				{
+					c = monthDay(i, year);
+					b = b + c;
+				}
+				//加一表示下个月一号为周几
+				d = (b + 1) % 7;
+				
+				//打印表头
+				System.out.println("星期日\t星期一\t星期二\t星期三\t星期四\t星期五\t星期六");
+				//每月的1号之前的空格
+				for (int i = 0; i < d; i++) 
+				{
+					System.out.print("\t");
+				}
+				
+				//c为当月天数
+				for (int i = 1; i <= (c = monthDay(month, year)); i++)
+				{
+					System.out.print(i + "\t");
+					//到周日换行
+					if((d + i) % 7 == 0) 
+					{
+						System.out.println();
+					}
+				}
+
+			} 
+		} 
+	}	
+	//判断是否为闰年
+	public static int isRun(int year)
+	{
+		if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) 
+		{
+			return 366;
+		}
+		return 365;
+	}	
+	//判断每个月有几天
+	public static int monthDay(int month,int year)
+	{
+		int a = 0;
+		switch (month)
+		{
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			a = 31;
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			a = 30;
+			break;
+		case 2:
+			if (isRun(year) == 365)
+			{
+				a = 28;
+				break;
+			} 
+			else if (isRun(year) == 366)
+			{
+				a = 29;
+				break;
+			}
+		}
+		return a;
+	}
+}
